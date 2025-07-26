@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- [Keep all the meta tags, title, and CSS links from your original code] -->
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #fd79a8;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--light) 0%, #dfe6e9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .auth-container {
+            width: 100%;
+            max-width: 550px;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 40px;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .auth-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 35px;
+            position: relative;
+        }
+        
+        .auth-header h1 {
+            color: var(--primary);
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .auth-header h1::after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            bottom: -8px;
+            left: 20%;
+            border-radius: 2px;
+        }
+        
+        .auth-header p {
+            color: var(--dark);
+            font-size: 15px;
+            opacity: 0.8;
+        }
+        
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-group {
+            flex: 1;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--dark);
+            font-size: 15px;
+            font-weight: 500;
+        }
+        
+        .form-group input, 
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background-color: rgba(245, 245, 245, 0.5);
+        }
+        
+        .form-group input:focus, 
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.2);
+        }
+        
+        .form-group .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 18px;
+            pointer-events: none;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .checkbox-group input {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+        
+        .checkbox-group label {
+            color: var(--dark);
+            font-size: 15px;
+        }
+        
+        .checkbox-group a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox-group a:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin: 10px 0;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .radio-option input {
+            margin-right: 8px;
+            accent-color: var(--primary);
+        }
+        
+        .auth-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 20px rgba(108, 92, 231, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+        
+        .auth-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+        }
+        
+        .auth-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--dark);
+            font-size: 15px;
+        }
+        
+        .auth-footer p {
+            margin-bottom: 12px;
+            opacity: 0.9;
+        }
+        
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-footer a:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+        
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .back-home:hover {
+            background: rgba(108, 92, 231, 0.2);
+            transform: translateX(-5px);
+        }
+        
+        .password-strength {
+            height: 4px;
+            background: #eee;
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .strength-meter {
+            height: 100%;
+            width: 0;
+            background: var(--danger);
+            transition: all 0.3s ease;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 25px;
+            }
+            
+            .auth-card {
+                padding: 30px;
+            }
+            
+            .auth-header h1 {
+                font-size: 28px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 25px 20px;
+                border-radius: 15px;
+            }
+            
+            .auth-header h1 {
+                font-size: 24px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+     <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>User Registration</h1>
+                <p>Join our community to find local services</p>
+            </div>
+            <form id="userRegisterForm" class="auth-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" placeholder="Enter your first name" required>
+                        <i class="fas fa-user input-icon"></i>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" placeholder="Enter your last name" required>
+                        <i class="fas fa-user input-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userEmail">Email Address</label>
+                    <input type="email" id="userEmail" placeholder="Enter your email" required>
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userPhone">Phone Number</label>
+                    <input type="tel" id="userPhone" placeholder="Enter your phone number" required>
+                    <i class="fas fa-phone input-icon"></i>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userPassword">Password</label>
+                        <input type="password" id="userPassword" placeholder="Create a password" required>
+                        <i class="fas fa-lock input-icon"></i>
+                        <div class="password-strength">
+                            <div class="strength-meter" id="passwordMeter"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="userConfirmPassword">Confirm Password</label>
+                        <input type="password" id="userConfirmPassword" placeholder="Confirm your password" required>
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="showPassword">
+                    <label for="showPassword">Show Passwords</label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userAddress">Street Address</label>
+                    <input type="text" id="userAddress" placeholder="Enter your street address" required>
+                    <i class="fas fa-map-marker-alt input-icon"></i>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="userCity">City</label>
+                        <input type="text" id="userCity" placeholder="Enter your city" required>
+                        <i class="fas fa-city input-icon"></i>
+                    </div>
+                    <div class="form-group">
+                        <label for="userState">State</label>
+                        <select id="userState" required>
+                            <option value="">Select State</option>
+                            <option value="TN">Tamil Nadu</option>
+                            <option value="KL">Kerala</option>
+                            <option value="KA">Karnataka</option>
+                            <option value="AP">Andhra Pradesh</option>
+                            <option value="MH">Maharashtra</option>
+                            <option value="DL">Delhi</option>
+                            <option value="UP">Uttar Pradesh</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="termsAgreement" required>
+                    <label for="termsAgreement">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="newsletterOptIn" checked>
+                    <label for="newsletterOptIn">Subscribe to our newsletter</label>
+                </div>
+                
+                <button type="submit" class="auth-btn">
+                    <i class="fas fa-user-plus" style="margin-right: 8px;"></i> Register Now
+                </button>
+            </form>
+            <div class="auth-footer">
+                <p>Already have an account? <a href="user-login.html">Login here</a></p>
+                <p>Are you a service provider? <a href="provider-register.html">Register as a provider</a></p>
+                <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Back to home</a>
+            </div>
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Password strength indicator
+  const passwordInput = document.getElementById('userPassword');
+  const strengthMeter = document.getElementById('passwordMeter');
+  
+  // Password strength calculation
+  passwordInput.addEventListener('input', function() {
+    const strength = calculatePasswordStrength(this.value);
+    updateStrengthMeter(strength);
+  });
+
+  // Toggle password visibility
+  document.getElementById('showPassword').addEventListener('change', function() {
+    const type = this.checked ? 'text' : 'password';
+    document.getElementById('userPassword').type = type;
+    document.getElementById('userConfirmPassword').type = type;
+  });
+
+  // Form submission handler
+  document.getElementById('userRegisterForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Get form values
+    const password = document.getElementById('userPassword').value;
+    const confirmPassword = document.getElementById('userConfirmPassword').value;
+    
+    // Client-side validation
+    if (password !== confirmPassword) {
+      alert('Passwords do not match!');
+      return;
+    }
+
+    if (calculatePasswordStrength(password) < 3) {
+      alert('Password too weak! Use at least 8 characters with letters and numbers');
+      return;
+    }
+    
+    if (!document.getElementById('termsAgreement').checked) {
+      alert('You must agree to the Terms of Service');
+      return;
+    }
+
+    // Prepare data for backend
+    const formData = {
+      firstName: document.getElementById('firstName').value.trim(),
+      lastName: document.getElementById('lastName').value.trim(),
+      email: document.getElementById('userEmail').value.trim().toLowerCase(),
+      password: password,
+      phone: document.getElementById('userPhone').value.trim(),
+      address: {
+        street: document.getElementById('userAddress').value.trim(),
+        city: document.getElementById('userCity').value.trim(),
+        state: document.getElementById('userState').value
+      },
+      role: 'user'
+    };
+
+    try {
+      // Send registration request
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      // Handle response
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText.includes('<html') ? 
+          'Registration failed. Please try again.' : 
+          errorText);
+      }
+
+      const data = await response.json();
+      
+      // Store token and redirect to login page
+      localStorage.setItem('token', data.token);
+      window.location.href = 'user-login.html';
+      
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert(`Registration failed: ${error.message}`);
+    }
+  });
+
+  // Helper function to calculate password strength
+  function calculatePasswordStrength(password) {
+    let strength = 0;
+    if (password.length > 7) strength += 1;
+    if (password.length > 11) strength += 1;
+    if (/[A-Z]/.test(password)) strength += 1;
+    if (/[0-9]/.test(password)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+    return Math.min(strength, 5);
+  }
+
+  // Helper function to update password strength meter
+  function updateStrengthMeter(strength) {
+    const colors = ['#d63031', '#e17055', '#fdcb6e', '#00b894', '#00b894'];
+    strengthMeter.style.width = `${(strength / 5) * 100}%`;
+    strengthMeter.style.background = colors[strength - 1] || colors[0];
+  }
+
+  // Optional: Add test data button (uncomment to use)
+  
+  document.getElementById('testBtn')?.addEventListener('click', function() {
+    document.getElementById('firstName').value = 'John';
+    document.getElementById('lastName').value = 'Doe';
+    document.getElementById('userEmail').value = 'john.doe@example.com';
+    document.getElementById('userPhone').value = '9876543210';
+    document.getElementById('userPassword').value = 'SecurePass123!';
+    document.getElementById('userConfirmPassword').value = 'SecurePass123!';
+    document.getElementById('userAddress').value = '123 Main St';
+    document.getElementById('userCity').value = 'Chennai';
+    document.getElementById('userState').value = 'Tamil Nadu';
+    document.getElementById('termsAgreement').checked = true;
+    passwordInput.dispatchEvent(new Event('input'));
+  });
+  
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Neighbor Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #4a6bff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: white;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: #4a6bff;
+        }
+
+        .menu-item i {
+            font-size: 1.1rem;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            background-color: #e74c3c;
+            border: none;
+            color: white;
+            padding: 0.8rem 1rem;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* Main content styles */
+        .main-content {
+            flex-grow: 1;
+            padding: 1.5rem;
+            overflow: hidden; /* Prevent content shaking */
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #4a6bff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Dashboard cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-header h3 {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+
+        .card-header i {
+            font-size: 1.5rem;
+            color: #4a6bff;
+        }
+
+        .card-body h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-body p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        /* Stats and charts container */
+        .stats-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-card h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Tables */
+        .data-table {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .data-table h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .data-table h2 a {
+            font-size: 0.9rem;
+            color: #4a6bff;
+            text-decoration: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            color: #7f8c8d;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        td {
+            color: #2c3e50;
+            font-size: 0.9rem;
+        }
+
+        .status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #4a6bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .action-btn:hover {
+            background-color: #3a5bef;
+        }
+
+        .action-btn.secondary {
+            background-color: #6c757d;
+        }
+
+        .action-btn.secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .action-btn.danger {
+            background-color: #dc3545;
+        }
+
+        .action-btn.danger:hover {
+            background-color: #c82333;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .pagination button {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .pagination button.active {
+            background-color: #4a6bff;
+            color: white;
+            border-color: #4a6bff;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 1200px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 1rem;
+            }
+
+            .sidebar-menu {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .menu-item {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .menu-item i {
+                font-size: 1rem;
+            }
+
+            .logout-btn {
+                margin-top: 0;
+                width: auto;
+            }
+
+            .dashboard-cards {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="avatar">A</div>
+                <h2>Admin Dashboard</h2>
+            </div>
+            
+            <div class="sidebar-menu">
+                <a href="#" class="menu-item active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-tools"></i>
+                    <span>Providers</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Bookings</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-comment-dollar"></i>
+                    <span>Transactions</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-star"></i>
+                    <span>Reviews</span>
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+            
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Admin Dashboard</h1>
+                <div class="user-profile">
+                    <div class="avatar">A</div>
+                    <span>Super Admin</span>
+                </div>
+            </div>
+            
+            <!-- Dashboard Cards -->
+            <div class="dashboard-cards">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Total Users</h3>
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="card-body">
+                        <h2>1,248</h2>
+                        <p>+12% from last month</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Service Providers</h3>
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="card-body">
+                        <h2>187</h2>
+                        <p>+8 new this week</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Completed Bookings</h3>
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="card-body">
+                        <h2>324</h2>
+                        <p>This month</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Total Revenue</h3>
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div class="card-body">
+                        <h2>₹2,84,500</h2>
+                        <p>+18% from last month</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats and Charts -->
+            <div class="stats-container">
+                <div class="chart-card">
+                    <h2>Monthly Growth</h2>
+                    <div class="chart-container">
+                        <canvas id="monthlyGrowthChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <h2>Service Distribution</h2>
+                    <div class="chart-container">
+                        <canvas id="serviceDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Users Table -->
+            <div class="data-table">
+                <h2>Recent Users <a href="#">View All</a></h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Joined</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#U1001</td>
+                            <td>Rajesh Kumar</td>
+                            <td>rajesh@example.com</td>
+                            <td>9876543210</td>
+                            <td>2 days ago</td>
+                            <td><span class="status status-active">Active</span></td>
+                            <td>
+                                <button class="action-btn">View</button>
+                                <button class="action-btn secondary">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#U1000</td>
+                            <td>Priya Sharma</td>
+                            <td>priya@example.com</td>
+                            <td>8765432109</td>
+                            <td>1 week ago</td>
+                            <td><span class="status status-active">Active</span></td>
+                            <td>
+                                <button class="action-btn">View</button>
+                                <button class="action-btn secondary">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#U999</td>
+                            <td>Vikram Patel</td>
+                            <td>vikram@example.com</td>
+                            <td>7654321098</td>
+                            <td>2 weeks ago</td>
+                            <td><span class="status status-inactive">Inactive</span></td>
+                            <td>
+                                <button class="action-btn">View</button>
+                                <button class="action-btn secondary">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#U998</td>
+                            <td>Ananya Gupta</td>
+                            <td>ananya@example.com</td>
+                            <td>6543210987</td>
+                            <td>3 weeks ago</td>
+                            <td><span class="status status-active">Active</span></td>
+                            <td>
+                                <button class="action-btn">View</button>
+                                <button class="action-btn secondary">Edit</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <button>Next</button>
+                </div>
+            </div>
+            
+            <!-- Recent Providers Table -->
+            <div class="data-table">
+                <h2>Recent Service Providers <a href="#">View All</a></h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Service</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Rating</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#P205</td>
+                            <td>Ravi Plumber</td>
+                            <td>Plumbing</td>
+                            <td>ravi@example.com</td>
+                            <td><span class="status status-active">Active</span></td>
+                            <td>4.8/5</td>
+                            <td>
+                                <button class="action-btn">View</button>
+                                <button class="action-btn secondary">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#P204</td>
+                            <td>Suresh Painter</td>
+                            <td>Painting</td>
+                            <td>suresh@example.com</td>
+                            <td><span class="status status-pending">Pending</span></td>
+                            <td>4.5/5</td>
+                            <td>
+                                <button class="action-btn">View</button>
+                                <button class="action-btn secondary">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#P203</td>
+                            <td>Mohan Electrician</td>
+                            <td>Electrical</td>
+                            <td>mohan@example.com</td>
+                            <td><span class="status status-active">Active</span></td>
+                            <td>4.7/5</td>
+                            <td>
+                                <button class="action-btn">View</button>
+                                <button class="action-btn secondary">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#P202</td>
+                            <td>Sunil Carpenter</td>
+                            <td>Carpentry</td>
+                            <td>sunil@example.com</td>
+                            <td><span class="status status-inactive">Inactive</span></td>
+                            <td>4.3/5</td>
+                            <td>
+                                <button class="action-btn">View</button>
+                                <button class="action-btn secondary">Edit</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <button>Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize charts
+            initCharts();
+            
+            // Fixed logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                
+                window.location.href = 'admin-login.html';
+            });
+
+            // Function to initialize charts
+            function initCharts() {
+                // Monthly Growth Chart (Line Chart)
+                const monthlyGrowthCtx = document.getElementById('monthlyGrowthChart').getContext('2d');
+                const monthlyGrowthChart = new Chart(monthlyGrowthCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                        datasets: [
+                            {
+                                label: 'Bookings',
+                                data: [120, 190, 170, 220, 250, 280, 300],
+                                borderColor: '#4a6bff',
+                                backgroundColor: 'rgba(74, 107, 255, 0.1)',
+                                tension: 0.3,
+                                fill: true
+                            },
+                            {
+                                label: 'Revenue (₹)',
+                                data: [50000, 75000, 65000, 90000, 110000, 125000, 140000],
+                                borderColor: '#2ecc71',
+                                backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                                tension: 0.3,
+                                fill: true
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+                // Service Distribution Chart (Pie Chart)
+                const serviceDistributionCtx = document.getElementById('serviceDistributionChart').getContext('2d');
+                const serviceDistributionChart = new Chart(serviceDistributionCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Plumbing', 'Electrical', 'Cleaning', 'Painting', 'Carpentry', 'Others'],
+                        datasets: [{
+                            data: [25, 20, 15, 15, 10, 15],
+                            backgroundColor: [
+                                '#4a6bff',
+                                '#2ecc71',
+                                '#e74c3c',
+                                '#f39c12',
+                                '#9b59b6',
+                                '#34495e'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right'
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

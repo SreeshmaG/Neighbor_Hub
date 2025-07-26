@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suresh Painter - Dashboard | Neighbor Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Same CSS as previous dashboard, but with painting color theme */
+        :root {
+            --primary-color: #e67e22;
+            --secondary-color: #d35400;
+        }
+        
+        .avatar {
+            background-color: #e67e22;
+        }
+        
+        .card-header i, .notification-count {
+            color: #e67e22;
+        }
+        
+        .card-value, .appointment-time {
+            color: #e67e22;
+        }
+        
+        .accept-btn {
+            background-color: #e67e22;
+        }
+        
+        .accept-btn:hover {
+            background-color: #d35400;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="avatar">SP</div>
+            <div class="user-info">
+                <h3>Suresh Painter</h3>
+                <p>suresh.painter@example.com</p>
+            </div>
+        </div>
+        
+        <div class="sidebar-menu">
+            <!-- Same menu items as previous dashboard -->
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Painting Services Dashboard</h1>
+            <div class="notification-bell">
+                <i class="fas fa-bell"></i>
+                <span class="notification-count">3</span>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-cards">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Interior Jobs</h3>
+                    <i class="fas fa-home"></i>
+                </div>
+                <div class="card-value">4</div>
+                <div class="card-description">Interior painting requests</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Exterior Jobs</h3>
+                    <i class="fas fa-building"></i>
+                </div>
+                <div class="card-value">2</div>
+                <div class="card-description">Exterior painting projects</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Earnings</h3>
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="card-value">$3,750</div>
+                <div class="card-description">This month's earnings</div>
+            </div>
+        </div>
+
+        <!-- Painting-Specific Notifications -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Painting Requests</h3>
+                <a href="#" style="font-size: 0.9rem; color: var(--primary-color);">View All</a>
+            </div>
+            
+            <div class="notification-item unread">
+                <div class="notification-icon">
+                    <i class="fas fa-paint-roller"></i>
+                </div>
+                <div class="notification-content">
+                    <h4>Living Room Painting</h4>
+                    <p>Mr. Iyer wants his living room painted in Indiranagar</p>
+                    <div class="notification-time">45 minutes ago</div>
+                </div>
+            </div>
+            
+            <div class="notification-item unread">
+                <div class="notification-icon">
+                    <i class="fas fa-brush"></i>
+                </div>
+                <div class="notification-content">
+                    <h4>Full House Painting</h4>
+                    <p>Mrs. Reddy needs her 3BHK painted in HSR Layout</p>
+                    <div class="notification-time">2 hours ago</div>
+                </div>
+            </div>
+            
+            <div class="notification-item">
+                <div class="notification-icon">
+                    <i class="fas fa-paint-brush"></i>
+                </div>
+                <div class="notification-content">
+                    <h4>Office Space</h4>
+                    <p>TechStart Inc wants their office painted next week</p>
+                    <div class="notification-time">1 day ago</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Painting Appointments -->
+        <div class="card" style="margin-top: 30px;">
+            <div class="card-header">
+                <h3>Current Painting Projects</h3>
+                <a href="#" style="font-size: 0.9rem; color: var(--primary-color);">View Schedule</a>
+            </div>
+            
+            <div class="appointment-item">
+                <div class="appointment-info">
+                    <h4>Bedroom Painting - Mr. Kapoor</h4>
+                    <p>Richmond Town, 2 bedrooms (600 sq ft)</p>
+                    <div class="appointment-time">Jun 10-12, 9:00 AM - 5:00 PM</div>
+                </div>
+                <div class="appointment-actions">
+                    <button class="accept-btn">Started Work</button>
+                    <button class="decline-btn">Delayed</button>
+                </div>
+            </div>
+            
+            <div class="appointment-item">
+                <div class="appointment-info">
+                    <h4>Exterior Painting - Sunshine Apartments</h4>
+                    <p>Koramangala, 4 floors exterior</p>
+                    <div class="appointment-time">Jun 15-20, 8:00 AM - 4:00 PM</div>
+                </div>
+                <div class="appointment-actions">
+                    <button class="accept-btn">Materials Ordered</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Painting History -->
+        <div class="card" style="margin-top: 30px;">
+            <div class="card-header">
+                <h3>Recent Painting Jobs</h3>
+                <a href="#" style="font-size: 0.9rem; color: var(--primary-color);">View Full History</a>
+            </div>
+            
+            <div class="history-item">
+                <div class="history-info">
+                    <h4>Kitchen Painting - Mrs. Joshi</h4>
+                    <p>Bellandur, 1 kitchen (300 sq ft)</p>
+                    <div class="appointment-time">May 28, 1 day job</div>
+                </div>
+                <div class="history-status status-completed">Completed - ₹8,500</div>
+            </div>
+            
+            <div class="history-item">
+                <div class="history-info">
+                    <h4>Office Painting - DesignHub</h4>
+                    <p>Whitefield, 2000 sq ft office</p>
+                    <div class="appointment-time">May 20-23, 4 days</div>
+                </div>
+                <div class="history-status status-completed">Completed - ₹42,000</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Same JavaScript as previous dashboard
+    </script>
+</body>
+</html>

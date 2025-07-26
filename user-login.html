@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Login | Neighbor Hub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+     * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .auth-container {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .auth-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      padding: 2.5rem;
+      width: 100%;
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .auth-header h1 {
+      color: #2c3e50;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-header p {
+      color: #7f8c8d;
+      font-size: 1rem;
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      font-weight: 500;
+      color: #2c3e50;
+      font-size: 0.9rem;
+    }
+
+    .form-group input {
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #4a6bff;
+    }
+
+    .form-group small {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #7f8c8d;
+      font-size: 0.8rem;
+      margin-top: 0.3rem;
+    }
+
+    .form-group small input {
+      width: auto;
+    }
+
+    .auth-btn {
+      background-color: #4a6bff;
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 1rem;
+    }
+
+    .auth-btn:hover {
+      background-color: #3a5bef;
+    }
+
+    .auth-footer {
+      margin-top: 2rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .auth-footer p {
+      color: #7f8c8d;
+      font-size: 0.9rem;
+    }
+
+    .auth-footer a {
+      color: #4a6bff;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .auth-footer a:hover {
+      color: #3a5bef;
+      text-decoration: underline;
+    }
+
+    .back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #4a6bff;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .auth-card {
+        padding: 1.5rem;
+      }
+      
+      .auth-header h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1>User Login</h1>
+        <p>Welcome back! Please login to continue</p>
+      </div>
+
+      <form id="userLoginForm" class="auth-form">
+        <div class="form-group">
+          <label for="userEmail">Email</label>
+          <input type="email" id="userEmail" placeholder="Enter your email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="userPassword">Password</label>
+          <input type="password" id="userPassword" placeholder="Enter your password" required />
+          <small><input type="checkbox" id="togglePassword"> Show Password</small>
+        </div>
+
+        <button type="submit" class="auth-btn">Login</button>
+      </form>
+
+      <div class="auth-footer">
+        <p><a href="forgot-password.html">Forgot Password?</a></p>
+        <p>Don't have an account? <a href="user-register.html">Register here</a></p>
+        <p>Are you a service provider? <a href="provider-login.html">Provider login</a></p>
+        <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Back to home</a>
+      </div>
+    </div>
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    setupPasswordToggle();
+    setupLoginForm();
+});
+
+function setupPasswordToggle() {
+    const toggle = document.getElementById('togglePassword');
+    const passwordField = document.getElementById('userPassword');
+    
+    if (toggle && passwordField) {
+        toggle.addEventListener('change', function() {
+            passwordField.type = this.checked ? 'text' : 'password';
+        });
+    }
+}
+
+async function setupLoginForm() {
+    const form = document.getElementById('userLoginForm');
+    if (!form) return;
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('userEmail').value.trim();
+        const password = document.getElementById('userPassword').value;
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        if (!validateInputs(email, password)) return;
+
+        setLoadingState(true, submitBtn);
+        
+        try {
+            // Call your backend API
+            const response = await fetch('http://localhost:3000/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Successful login
+                storeUserData(data);
+                redirectToDashboard();
+            } else {
+                // Failed login
+                handleLoginError(new Error(data.message || 'Login failed'));
+                setLoadingState(false, submitBtn);
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            handleLoginError(new Error('Network error. Please try again.'));
+            setLoadingState(false, submitBtn);
+        }
+    });
+}
+
+function validateInputs(email, password) {
+    if (!email || !password) {
+        alert('Please enter both email and password');
+        return false;
+    }
+    
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert('Please enter a valid email address');
+        return false;
+    }
+    
+    return true;
+}
+
+function setLoadingState(isLoading, button) {
+    if (!button) return;
+    button.disabled = isLoading;
+    button.innerHTML = isLoading 
+        ? '<i class="fas fa-spinner fa-spin"></i> Logging in...' 
+        : 'Login';
+}
+
+function storeUserData(data) {
+    try {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        console.log('User data stored successfully');
+    } catch (e) {
+        console.error('Error storing user data:', e);
+    }
+}
+
+function redirectToDashboard() {
+    window.location.href = 'user_dashboard.html';
+}
+
+function handleLoginError(error) {
+    console.error('Login error:', error);
+    alert(error.message);
+    document.getElementById('userPassword').value = '';
+    document.getElementById('userEmail').focus();
+}
+ document.addEventListener('DOMContentLoaded', function() {
+        // Check if already logged in
+        if (localStorage.getItem('userAuthToken')) {
+            window.location.href = 'user_dashboard.html';
+        }
+
+        // Sample user data (in a real app, this would come from a server)
+        const users = [
+            {
+                name: "Sreeshma G",
+                email: "sreesh@gmail.com",
+                password: "sree33",
+                type: "user"
+            },
+            {
+                name: "Ananya",
+                email: "anu@gmail.com",
+                password: "anu1234",
+                type: "user"
+            }
+        ];
+
+        // Password toggle
+        document.getElementById('togglePassword').addEventListener('change', function() {
+            const passwordField = document.getElementById("userPassword");
+            passwordField.type = this.checked ? "text" : "password";
+        });
+
+        // Login handler
+        document.getElementById('userLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById("userEmail").value.trim();
+            const password = document.getElementById("userPassword").value;
+            
+            // Find user
+            const user = users.find(u => u.email === email && u.password === password && u.type === "user");
+            
+            if (user) {
+                // Create auth token (in a real app, this would be a JWT from the server)
+                const authToken = btoa(JSON.stringify({
+                    email: user.email,
+                    name: user.name,
+                    type: user.type
+                }));
+                
+                localStorage.setItem('userAuthToken', authToken);
+                
+                // Show success alert
+                alert('Login successful! Welcome back, ' + user.name + '!');
+                
+                // Redirect to dashboard after alert
+                window.location.href = 'user_dashboard.html';
+            } else {
+                alert('Invalid email or password');
+                document.getElementById("userPassword").value = '';
+            }
+        });
+    });
+</script>
+</body>
+</html>

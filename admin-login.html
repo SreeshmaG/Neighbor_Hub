@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Neighbor Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #4a6bff, #3a5bef);
+        }
+
+        .logo {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-text span:first-child {
+            color: #4a6bff;
+        }
+
+        .logo-text span:last-child {
+            color: #2c3e50;
+        }
+
+        .login-header h1 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .login-header p {
+            color: #7f8c8d;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .input-group {
+            position: relative;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 3rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #4a6bff;
+            box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.1);
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .remember-me input {
+            accent-color: #4a6bff;
+            width: 16px;
+            height: 16px;
+        }
+
+        .forgot-password a {
+            color: #4a6bff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .forgot-password a:hover {
+            color: #3a5bef;
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            background-color: #4a6bff;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 0.5rem;
+        }
+
+        .login-btn:hover {
+            background-color: #3a5bef;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(58, 91, 239, 0.3);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            display: none;
+            text-align: center;
+            padding: 0.5rem;
+            background-color: #fdecea;
+            border-radius: 5px;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 576px) {
+            .login-container {
+                padding: 1.5rem;
+                margin: 1rem;
+                border-radius: 10px;
+            }
+            
+            .logo img {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .logo-text {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <img src="https://i.imgur.com/JzQZQ9Q.png" alt="Neighbor Hub Logo" onerror="this.src='https://via.placeholder.com/80?text=NH'">
+            <div class="logo-text">
+                <span>Neighbor</span>
+                <span>Hub</span>
+            </div>
+        </div>
+        
+        <div class="login-header">
+            <h1>Admin Login</h1>
+            <p>Access your admin dashboard</p>
+        </div>
+        
+        <form class="login-form" id="loginForm">
+            <div class="input-group">
+                <label for="email">Email Address</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+            </div>
+            
+            <div class="remember-forgot">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <div class="forgot-password">
+                    <a href="#">Forgot password?</a>
+                </div>
+            </div>
+            
+            <button type="submit" class="login-btn">Login</button>
+            
+            <div class="error-message" id="errorMessage">
+                Invalid email or password. Please try again.
+            </div>
+        </form>
+        
+        <div class="footer">
+            &copy; <span id="currentYear"></span> Neighbor Hub. All rights reserved.
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Check if user is already logged in
+            if (localStorage.getItem('adminAuthToken') || sessionStorage.getItem('adminAuthToken')) {
+                window.location.href = 'admin-dashboard.html';
+            }
+            
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const rememberMe = document.getElementById('remember').checked;
+                
+                // Simple validation - in a real app, you would check against your backend
+                if (email === 'admin@gmail.com' && password === 'admin33') {
+                    // Create a simple auth token (in real app, this would come from your backend)
+                    const authToken = 'demo-auth-token-' + Math.random().toString(36).substring(2);
+                    
+                    if (rememberMe) {
+                        localStorage.setItem('adminAuthToken', authToken);
+                    } else {
+                        sessionStorage.setItem('adminAuthToken', authToken);
+                    }
+                    
+                    // Redirect to dashboard
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    errorMessage.style.display = 'block';
+                }
+            });
+            
+            // Clear error message when user starts typing
+            document.getElementById('email').addEventListener('input', function() {
+                errorMessage.style.display = 'none';
+            });
+            
+            document.getElementById('password').addEventListener('input', function() {
+                errorMessage.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

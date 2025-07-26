@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Projects | Neighbor Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #a29bfe;
+            --secondary: #fd79a8;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --gray: #dfe6e9;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            height: 100vh;
+        }
+
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 25px;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .sidebar-header h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .username {
+            font-weight: 600;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 25px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            gap: 12px;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+        }
+
+        .sidebar-nav a.active {
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+        }
+
+        .sidebar-nav a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .main-header {
+            margin-bottom: 30px;
+        }
+
+        .main-header h1 {
+            color: var(--dark);
+        }
+
+        /* No Saved Projects */
+        .no-saved-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 70vh;
+            text-align: center;
+        }
+
+        .no-saved-icon {
+            font-size: 72px;
+            color: var(--warning);
+            margin-bottom: 20px;
+        }
+
+        .no-saved-message h2 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .no-saved-message p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .explore-btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .explore-btn:hover {
+            background: #5a4bc2;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Neighbor Hub</h2>
+                <div class="user-profile">
+                    <div class="avatar">SG</div>
+                    <div class="user-info">
+                        <span class="username">Sreeshma G</span>
+                        <span class="user-email">sreesh@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html"><i class="fas fa-search"></i> Find Services</a>
+                <a href="saved-projects.html" class="active"><i class="fas fa-star"></i> Saved Projects</a>
+                <a href="#"><i class="fas fa-history"></i> My Requests</a>
+                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <header class="main-header">
+                <h1>Saved Projects</h1>
+            </header>
+
+            <!-- No Saved Projects Content -->
+            <div class="no-saved-container">
+                <div class="no-saved-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="no-saved-message">
+                    <h2>No Saved Projects Yet</h2>
+                    <p>When you save service providers, they will appear here for easy access.</p>
+                    <button class="explore-btn" onclick="window.location.href='dashboard.html'">
+                        Explore Services
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Authentication check
+            if (!localStorage.getItem('userAuthToken')) {
+                window.location.href = 'user-login.html';
+                return;
+            }
+
+            // Display user info
+            try {
+                const token = localStorage.getItem('userAuthToken');
+                if (token) {
+                    const user = JSON.parse(atob(token));
+                    document.querySelector('.username').textContent = user.name;
+                    document.querySelector('.user-email').textContent = user.email;
+                    document.querySelector('.avatar').textContent = 
+                        user.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                }
+            } catch (e) {
+                console.error('Error parsing user token', e);
+                localStorage.removeItem('userAuthToken');
+                window.location.href = 'user-login.html';
+            }
+
+            // Logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('userAuthToken');
+                localStorage.removeItem('savedProviders');
+                window.location.href = 'user-login.html';
+            });
+        });
+    </script>
+</body>
+</html>

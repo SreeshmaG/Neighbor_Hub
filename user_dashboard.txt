@@ -1,0 +1,988 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Neighbor Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #a29bfe;
+            --secondary: #fd79a8;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --gray: #dfe6e9;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 25px;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .sidebar-header h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .username {
+            font-weight: 600;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 25px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            gap: 12px;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+        }
+
+        .sidebar-nav a.active {
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+        }
+
+        .sidebar-nav a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .main-header h1 {
+            color: var(--dark);
+        }
+
+        .search-bar {
+            display: flex;
+            width: 400px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--gray);
+            border-radius: 8px 0 0 8px;
+            outline: none;
+        }
+
+        .search-bar button {
+            padding: 0 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+        }
+
+        /* Service Categories */
+        .service-categories {
+            margin-bottom: 40px;
+        }
+
+        .service-categories h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .category-card.selected {
+            border: 2px solid var(--primary);
+            background-color: rgba(108, 92, 231, 0.05);
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .electrician { background: #f39c12; }
+        .plumber { background: #3498db; }
+        .carpenter { background: #8e44ad; }
+        .painter { background: #e74c3c; }
+        .driver { background: #27ae60; }
+        .newspaper-delivery { background: #16a085; }
+        .milkman { background: #d35400; }
+        .home-tutor { background: #2c3e50; }
+
+        /* Location Selector */
+        .location-selector {
+            margin-bottom: 40px;
+        }
+
+        .location-selector h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .location-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .location-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border: 1px solid var(--gray);
+        }
+
+        .location-card:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .location-card.selected {
+            border: 2px solid var(--primary);
+            background-color: rgba(108, 92, 231, 0.05);
+            color: var(--primary);
+        }
+
+        /* Results Section */
+        .results-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            font-size: 22px;
+        }
+
+        .sort-options select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--gray);
+            outline: none;
+        }
+
+        .provider-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .provider-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border: 1px solid var(--gray);
+        }
+
+        .provider-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .provider-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 15px;
+        }
+
+        .provider-info {
+            flex: 1;
+        }
+
+        .provider-info h3 {
+            margin-bottom: 5px;
+        }
+
+        .provider-rating {
+            color: var(--warning);
+            font-size: 14px;
+        }
+
+        .provider-rating span {
+            color: var(--dark);
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .provider-details {
+            margin-bottom: 15px;
+        }
+
+        .provider-details p {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .provider-details i {
+            margin-right: 8px;
+            width: 16px;
+            color: var(--primary);
+        }
+
+        .provider-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn i {
+            font-size: 16px;
+        }
+
+        .call-btn {
+            background: var(--success);
+            color: white;
+        }
+
+        .call-btn:hover {
+            background: #00a884;
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+        }
+
+        .whatsapp-btn:hover {
+            background: #1da851;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 240px;
+            }
+            .search-bar {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            .main-content {
+                padding: 15px;
+            }
+            .search-bar {
+                width: 100%;
+                margin-top: 15px;
+            }
+            .main-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .category-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .provider-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .location-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Neighbor Hub</h2>
+                <div class="user-profile">
+                    <div class="avatar">SG</div>
+                    <div class="user-info">
+                        <span class="username">Sreeshma G</span>
+                        <span class="user-email">sreesh@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="active"><i class="fas fa-search"></i> Find Services</a>
+                <a href="#"><i class="fas fa-history"></i> My Requests</a>
+                <a href="#"><i class="fas fa-star"></i> Saved Providers</a>
+                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <header class="main-header">
+                <h1>Find Local Services</h1>
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for services...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Service Categories -->
+                <section class="service-categories">
+                    <h2>Popular Services</h2>
+                    <div class="category-grid">
+                        <div class="category-card" data-service="electrician">
+                            <div class="category-icon electrician">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h3>Electrician</h3>
+                        </div>
+                        <div class="category-card" data-service="plumber">
+                            <div class="category-icon plumber">
+                                <i class="fas fa-faucet"></i>
+                            </div>
+                            <h3>Plumber</h3>
+                        </div>
+                        <div class="category-card" data-service="carpenter">
+                            <div class="category-icon carpenter">
+                                <i class="fas fa-hammer"></i>
+                            </div>
+                            <h3>Carpenter</h3>
+                        </div>
+                        <div class="category-card" data-service="painter">
+                            <div class="category-icon painter">
+                                <i class="fas fa-paint-roller"></i>
+                            </div>
+                            <h3>Painter</h3>
+                        </div>
+                        <div class="category-card" data-service="driver">
+                            <div class="category-icon driver">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <h3>Driver</h3>
+                        </div>
+                        <div class="category-card" data-service="newspaper-delivery">
+                            <div class="category-icon newspaper-delivery">
+                                <i class="fas fa-newspaper"></i>
+                            </div>
+                            <h3>Newspaper Delivery</h3>
+                        </div>
+                        <div class="category-card" data-service="milkman">
+                            <div class="category-icon milkman">
+                                <i class="fas fa-wine-bottle"></i>
+                            </div>
+                            <h3>Milkman</h3>
+                        </div>
+                        <div class="category-card" data-service="home-tutor">
+                            <div class="category-icon home-tutor">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <h3>Home Tutor</h3>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Location Selector -->
+                <section class="location-selector">
+                    <h2>Select Your Area</h2>
+                    <div class="location-grid">
+                        <div class="location-card" data-area="Singanallur">Singanallur</div>
+                        <div class="location-card" data-area="Peelamedu">Peelamedu</div>
+                        <div class="location-card" data-area="Ganapathy">Ganapathy</div>
+                        <div class="location-card" data-area="Saibaba Colony">Saibaba Colony</div>
+                        <div class="location-card" data-area="Koundampalayam">Koundampalayam</div>
+                        <div class="location-card" data-area="R.S.Puram">R.S.Puram</div>
+                        <div class="location-card" data-area="Gandhipuram">Gandhipuram</div>
+                        <div class="location-card" data-area="Thudiyalur">Thudiyalur</div>
+                    </div>
+                </section>
+
+                <!-- Results Section -->
+                <section id="results-section" class="results-section">
+                    <div class="section-header">
+                        <h2>Available Service Providers</h2>
+                        <div class="sort-options">
+                            <select id="sortSelect">
+                                <option value="rating">Sort by Rating</option>
+                                <option value="distance">Sort by Distance</option>
+                                <option value="price">Sort by Price</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="providerList" class="provider-list">
+                        <!-- Providers will be loaded here -->
+                        <p class="select-prompt">Please select a service and area to see available providers</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Authentication check
+            if (!localStorage.getItem('userAuthToken')) {
+                window.location.href = 'user-login.html';
+                return;
+            }
+
+            // Display user info
+            try {
+                const token = localStorage.getItem('userAuthToken');
+                if (token) {
+                    const user = JSON.parse(atob(token));
+                    document.querySelector('.username').textContent = user.name;
+                    document.querySelector('.user-email').textContent = user.email;
+                    document.querySelector('.avatar').textContent = 
+                        user.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                }
+            } catch (e) {
+                console.error('Error parsing user token', e);
+                localStorage.removeItem('userAuthToken');
+                window.location.href = 'user-login.html';
+            }
+
+            // Logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('userAuthToken');
+                window.location.href = 'user-login.html';
+            });
+
+            // Comprehensive provider database
+            const providers = {
+                electrician: {
+                    Singanallur: [
+                        { id: 1, name: "Rajesh Electricals", phone: "9823451111", rating: 4.8, reviews: 32, price: "₹500/hr", distance: "1.2 km", experience: "8 years" },
+                        { id: 2, name: "Current Masters", phone: "9823452222", rating: 4.7, reviews: 28, price: "₹450/hr", distance: "2.5 km", experience: "5 years" }
+                    ],
+                    Peelamedu: [
+                        { id: 3, name: "Voltage Solutions", phone: "9823453333", rating: 4.9, reviews: 45, price: "₹550/hr", distance: "0.8 km", experience: "10 years" },
+                        { id: 4, name: "Power Electric", phone: "9823454444", rating: 4.5, reviews: 22, price: "₹400/hr", distance: "1.5 km", experience: "6 years" }
+                    ],
+                    Ganapathy: [
+                        { id: 5, name: "Ganesh Electric", phone: "9823455555", rating: 4.6, reviews: 18, price: "₹480/hr", distance: "2.0 km", experience: "7 years" }
+                    ],
+                    "Saibaba Colony": [
+                        { id: 6, name: "Sai Electricals", phone: "9823456666", rating: 4.7, reviews: 35, price: "₹520/hr", distance: "1.1 km", experience: "9 years" }
+                    ],
+                    Koundampalayam: [
+                        { id: 7, name: "Kumar Electric", phone: "9823457777", rating: 4.4, reviews: 15, price: "₹420/hr", distance: "1.8 km", experience: "5 years" }
+                    ],
+                    "R.S.Puram": [
+                        { id: 8, name: "RS Power Electric", phone: "9823458888", rating: 4.8, reviews: 40, price: "₹600/hr", distance: "0.5 km", experience: "12 years" }
+                    ],
+                    Gandhipuram: [
+                        { id: 9, name: "Gandhi Electric", phone: "9823459999", rating: 4.3, reviews: 20, price: "₹450/hr", distance: "1.3 km", experience: "6 years" }
+                    ],
+                    Thudiyalur: [
+                        { id: 10, name: "Thiru Electricals", phone: "9823450000", rating: 4.5, reviews: 25, price: "₹470/hr", distance: "2.2 km", experience: "8 years" }
+                    ]
+                },
+                plumber: {
+                    Singanallur: [
+                        { id: 1, name: "Singanallur Plumbers", phone: "9812341111", rating: 4.7, reviews: 25, price: "₹600/hr", distance: "1.0 km", experience: "7 years" }
+                    ],
+                    Peelamedu: [
+                        { id: 2, name: "Pushpa Plumbing", phone: "9812342222", rating: 4.7, reviews: 19, price: "₹600/hr", distance: "0.8 km", experience: "8 years" },
+                        { id: 3, name: "Peelamedu Pipe Masters", phone: "9812343333", rating: 4.5, reviews: 30, price: "₹550/hr", distance: "1.2 km", experience: "6 years" }
+                    ],
+                    Ganapathy: [
+                        { id: 4, name: "Ravi Plumber", phone: "9812340000", rating: 4.5, reviews: 27, price: "₹550/hr", distance: "3.1 km", experience: "5 years" },
+                        { id: 5, name: "Ganesh Plumbing", phone: "9812345555", rating: 4.8, reviews: 42, price: "₹650/hr", distance: "2.5 km", experience: "10 years" }
+                    ],
+                    "Saibaba Colony": [
+                        { id: 6, name: "Sai Pipe Solutions", phone: "9812346666", rating: 4.6, reviews: 33, price: "₹580/hr", distance: "0.9 km", experience: "9 years" }
+                    ],
+                    Koundampalayam: [
+                        { id: 7, name: "Koundam Plumbing", phone: "9812347777", rating: 4.4, reviews: 18, price: "₹520/hr", distance: "1.7 km", experience: "6 years" }
+                    ],
+                    "R.S.Puram": [
+                        { id: 8, name: "RS Pipe Experts", phone: "9812348888", rating: 4.9, reviews: 50, price: "₹700/hr", distance: "0.6 km", experience: "15 years" }
+                    ],
+                    Gandhipuram: [
+                        { id: 9, name: "Gandhi Plumbers", phone: "9812349999", rating: 4.3, reviews: 22, price: "₹500/hr", distance: "1.4 km", experience: "5 years" }
+                    ],
+                    Thudiyalur: [
+                        { id: 10, name: "Thudiyalur Pipe Works", phone: "9812340001", rating: 4.5, reviews: 28, price: "₹530/hr", distance: "2.0 km", experience: "7 years" }
+                    ]
+                },
+                carpenter: {
+                    Singanallur: [
+                        { id: 1, name: "Singanallur Carpentry", phone: "9801231111", rating: 4.6, reviews: 20, price: "₹700/day", distance: "1.3 km", experience: "8 years" }
+                    ],
+                    Peelamedu: [
+                        { id: 2, name: "Peelamedu Wood Works", phone: "9801232222", rating: 4.8, reviews: 35, price: "₹800/day", distance: "0.9 km", experience: "10 years" }
+                    ],
+                    Ganapathy: [
+                        { id: 3, name: "Ganesh Carpentry", phone: "9801233333", rating: 4.5, reviews: 25, price: "₹750/day", distance: "2.8 km", experience: "7 years" }
+                    ],
+                    "Saibaba Colony": [
+                        { id: 4, name: "Sai Wood Crafts", phone: "9801234444", rating: 4.7, reviews: 30, price: "₹850/day", distance: "1.0 km", experience: "9 years" }
+                    ],
+                    Koundampalayam: [
+                        { id: 5, name: "Koundam Carpenters", phone: "9801235555", rating: 4.4, reviews: 15, price: "₹650/day", distance: "1.9 km", experience: "5 years" }
+                    ],
+                    "R.S.Puram": [
+                        { id: 6, name: "RS Furniture Makers", phone: "9801236666", rating: 4.9, reviews: 45, price: "₹900/day", distance: "0.7 km", experience: "12 years" }
+                    ],
+                    Gandhipuram: [
+                        { id: 7, name: "Gandhi Wood Works", phone: "9801237777", rating: 4.3, reviews: 20, price: "₹700/day", distance: "1.5 km", experience: "6 years" }
+                    ],
+                    Thudiyalur: [
+                        { id: 8, name: "Thiru Carpentry", phone: "9801238888", rating: 4.5, reviews: 22, price: "₹720/day", distance: "2.3 km", experience: "7 years" }
+                    ]
+                },
+                painter: {
+                    Singanallur: [
+                        { id: 1, name: "Singanallur Painters", phone: "9876541111", rating: 4.5, reviews: 18, price: "₹600/day", distance: "1.4 km", experience: "6 years" }
+                    ],
+                    Peelamedu: [
+                        { id: 2, name: "Peelamedu Color Masters", phone: "9876542222", rating: 4.7, reviews: 25, price: "₹700/day", distance: "1.0 km", experience: "8 years" }
+                    ],
+                    Ganapathy: [
+                        { id: 3, name: "Ganesh Painting", phone: "9876543333", rating: 4.6, reviews: 22, price: "₹650/day", distance: "3.0 km", experience: "7 years" }
+                    ],
+                    "Saibaba Colony": [
+                        { id: 4, name: "Sai Painters", phone: "9876544444", rating: 4.8, reviews: 35, price: "₹750/day", distance: "1.1 km", experience: "10 years" }
+                    ],
+                    Koundampalayam: [
+                        { id: 5, name: "Koundam Painting", phone: "9876545555", rating: 4.4, reviews: 15, price: "₹600/day", distance: "2.0 km", experience: "5 years" }
+                    ],
+                    "R.S.Puram": [
+                        { id: 6, name: "RS Color Experts", phone: "9876546666", rating: 4.9, reviews: 40, price: "₹800/day", distance: "0.8 km", experience: "12 years" }
+                    ],
+                    Gandhipuram: [
+                        { id: 7, name: "Gandhi Painters", phone: "9876547777", rating: 4.3, reviews: 20, price: "₹650/day", distance: "1.6 km", experience: "6 years" }
+                    ],
+                    Thudiyalur: [
+                        { id: 8, name: "Thiru Painting", phone: "9876548888", rating: 4.5, reviews: 23, price: "₹680/day", distance: "2.4 km", experience: "7 years" }
+                    ]
+                },
+                driver: {
+                    Singanallur: [
+                        { id: 1, name: "Singanallur Drivers", phone: "9865432111", rating: 4.6, reviews: 20, price: "₹1000/day", distance: "1.5 km", experience: "8 years" }
+                    ],
+                    Peelamedu: [
+                        { id: 2, name: "Peelamedu Drive Safe", phone: "9865432222", rating: 4.8, reviews: 30, price: "₹1200/day", distance: "1.1 km", experience: "10 years" }
+                    ],
+                    Ganapathy: [
+                        { id: 3, name: "Ganesh Drivers", phone: "9865432333", rating: 4.5, reviews: 25, price: "₹1100/day", distance: "3.2 km", experience: "7 years" }
+                    ],
+                    "Saibaba Colony": [
+                        { id: 4, name: "Sai Travels", phone: "9865432444", rating: 4.7, reviews: 35, price: "₹1300/day", distance: "1.2 km", experience: "9 years" }
+                    ],
+                    Koundampalayam: [
+                        { id: 5, name: "Koundam Drivers", phone: "9865432555", rating: 4.4, reviews: 15, price: "₹900/day", distance: "2.1 km", experience: "5 years" }
+                    ],
+                    "R.S.Puram": [
+                        { id: 6, name: "RS Chauffeurs", phone: "9865432666", rating: 4.9, reviews: 45, price: "₹1500/day", distance: "0.9 km", experience: "12 years" }
+                    ],
+                    Gandhipuram: [
+                        { id: 7, name: "Gandhi Drivers", phone: "9865432777", rating: 4.3, reviews: 20, price: "₹1000/day", distance: "1.7 km", experience: "6 years" }
+                    ],
+                    Thudiyalur: [
+                        { id: 8, name: "Thiru Travels", phone: "9865432888", rating: 4.5, reviews: 22, price: "₹1050/day", distance: "2.5 km", experience: "7 years" }
+                    ]
+                },
+                "newspaper-delivery": {
+                    Singanallur: [
+                        { id: 1, name: "Singanallur News", phone: "9854321111", rating: 4.7, reviews: 15, price: "₹200/month", distance: "1.6 km", experience: "5 years" }
+                    ],
+                    Peelamedu: [
+                        { id: 2, name: "Peelamedu Daily", phone: "9854322222", rating: 4.8, reviews: 20, price: "₹250/month", distance: "1.2 km", experience: "6 years" }
+                    ],
+                    Ganapathy: [
+                        { id: 3, name: "Ganapathy News", phone: "9854323333", rating: 4.6, reviews: 18, price: "₹220/month", distance: "3.3 km", experience: "4 years" }
+                    ],
+                    "Saibaba Colony": [
+                        { id: 4, name: "Sai News", phone: "9854324444", rating: 4.9, reviews: 25, price: "₹300/month", distance: "1.3 km", experience: "8 years" }
+                    ],
+                    Koundampalayam: [
+                        { id: 5, name: "Koundam News", phone: "9854325555", rating: 4.5, reviews: 12, price: "₹200/month", distance: "2.2 km", experience: "3 years" }
+                    ],
+                    "R.S.Puram": [
+                        { id: 6, name: "RS Times", phone: "9854326666", rating: 4.9, reviews: 30, price: "₹350/month", distance: "1.0 km", experience: "10 years" }
+                    ],
+                    Gandhipuram: [
+                        { id: 7, name: "Gandhi News", phone: "9854327777", rating: 4.4, reviews: 15, price: "₹230/month", distance: "1.8 km", experience: "5 years" }
+                    ],
+                    Thudiyalur: [
+                        { id: 8, name: "Thiru Daily", phone: "9854328888", rating: 4.6, reviews: 20, price: "₹240/month", distance: "2.6 km", experience: "6 years" }
+                    ]
+                },
+                milkman: {
+                    Singanallur: [
+                        { id: 1, name: "Singanallur Dairy", phone: "9843211111", rating: 4.8, reviews: 25, price: "₹50/liter", distance: "1.7 km", experience: "8 years" }
+                    ],
+                    Peelamedu: [
+                        { id: 2, name: "Peelamedu Milk", phone: "9843212222", rating: 4.9, reviews: 35, price: "₹55/liter", distance: "1.3 km", experience: "10 years" }
+                    ],
+                    Ganapathy: [
+                        { id: 3, name: "Ganesh Dairy", phone: "9843213333", rating: 4.7, reviews: 28, price: "₹52/liter", distance: "3.4 km", experience: "7 years" }
+                    ],
+                    "Saibaba Colony": [
+                        { id: 4, name: "Sai Milk", phone: "9843214444", rating: 4.9, reviews: 40, price: "₹60/liter", distance: "1.4 km", experience: "12 years" }
+                    ],
+                    Koundampalayam: [
+                        { id: 5, name: "Koundam Dairy", phone: "9843215555", rating: 4.6, reviews: 20, price: "₹48/liter", distance: "2.3 km", experience: "5 years" }
+                    ],
+                    "R.S.Puram": [
+                        { id: 6, name: "RS Fresh Milk", phone: "9843216666", rating: 4.9, reviews: 50, price: "₹65/liter", distance: "1.1 km", experience: "15 years" }
+                    ],
+                    Gandhipuram: [
+                        { id: 7, name: "Gandhi Dairy", phone: "9843217777", rating: 4.5, reviews: 22, price: "₹50/liter", distance: "1.9 km", experience: "6 years" }
+                    ],
+                    Thudiyalur: [
+                        { id: 8, name: "Thiru Milk", phone: "9843218888", rating: 4.7, reviews: 30, price: "₹53/liter", distance: "2.7 km", experience: "8 years" }
+                    ]
+                },
+                "home-tutor": {
+                    Singanallur: [
+                        { id: 1, name: "Singanallur Tutors", phone: "9832101111", rating: 4.7, reviews: 20, price: "₹500/hr", distance: "1.8 km", subjects: "Math, Science" }
+                    ],
+                    Peelamedu: [
+                                               { id: 2, name: "Peelamedu Academy", phone: "9832102222", rating: 4.9, reviews: 35, price: "₹600/hr", distance: "1.4 km", subjects: "All Subjects" }
+                    ],
+                    Ganapathy: [
+                        { id: 3, name: "Ganesh Tutors", phone: "9832103333", rating: 4.6, reviews: 25, price: "₹550/hr", distance: "3.5 km", subjects: "English, Social" }
+                    ],
+                    "Saibaba Colony": [
+                        { id: 4, name: "Sai Tutorials", phone: "9832104444", rating: 4.8, reviews: 40, price: "₹650/hr", distance: "1.5 km", subjects: "Math, Physics" }
+                    ],
+                    Koundampalayam: [
+                        { id: 5, name: "Koundam Tutors", phone: "9832105555", rating: 4.5, reviews: 18, price: "₹500/hr", distance: "2.4 km", subjects: "Biology, Chemistry" }
+                    ],
+                    "R.S.Puram": [
+                        { id: 6, name: "RS Education", phone: "9832106666", rating: 4.9, reviews: 45, price: "₹700/hr", distance: "1.2 km", subjects: "All Competitive Exams" }
+                    ],
+                    Gandhipuram: [
+                        { id: 7, name: "Gandhi Tutors", phone: "9832107777", rating: 4.4, reviews: 20, price: "₹520/hr", distance: "2.0 km", subjects: "Commerce, Accounts" }
+                    ],
+                    Thudiyalur: [
+                        { id: 8, name: "Thiru Tutorials", phone: "9832108888", rating: 4.6, reviews: 25, price: "₹540/hr", distance: "2.8 km", subjects: "Computer Science" }
+                    ]
+                }
+            };
+
+            // DOM elements
+            const categoryCards = document.querySelectorAll('.category-card');
+            const locationCards = document.querySelectorAll('.location-card');
+            const providerList = document.getElementById('providerList');
+            const sortSelect = document.getElementById('sortSelect');
+            const searchInput = document.querySelector('.search-bar input');
+            const searchButton = document.querySelector('.search-bar button');
+
+            // Selected service and area
+            let selectedService = null;
+            let selectedArea = null;
+
+            // Event listeners for category cards
+            categoryCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove selected class from all cards
+                    categoryCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add selected class to clicked card
+                    this.classList.add('selected');
+                    
+                    // Set selected service
+                    selectedService = this.getAttribute('data-service');
+                    
+                    // If area is already selected, show providers
+                    if (selectedArea) {
+                        showProviders(selectedService, selectedArea);
+                    }
+                });
+            });
+
+            // Event listeners for location cards
+            locationCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove selected class from all cards
+                    locationCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add selected class to clicked card
+                    this.classList.add('selected');
+                    
+                    // Set selected area
+                    selectedArea = this.getAttribute('data-area');
+                    
+                    // If service is already selected, show providers
+                    if (selectedService) {
+                        showProviders(selectedService, selectedArea);
+                    }
+                });
+            });
+
+            // Sort functionality
+            sortSelect.addEventListener('change', function() {
+                if (selectedService && selectedArea) {
+                    showProviders(selectedService, selectedArea);
+                }
+            });
+
+            // Search functionality
+            searchButton.addEventListener('click', function() {
+                const searchTerm = searchInput.value.toLowerCase();
+                if (searchTerm && selectedService && selectedArea) {
+                    filterProviders(searchTerm);
+                }
+            });
+
+            // Function to show providers
+            function showProviders(service, area) {
+                const areaProviders = providers[service][area];
+                if (!areaProviders || areaProviders.length === 0) {
+                    providerList.innerHTML = `<p class="no-providers">No providers available for ${service} in ${area}.</p>`;
+                    return;
+                }
+
+                // Sort providers based on selected option
+                const sortedProviders = [...areaProviders];
+                const sortBy = sortSelect.value;
+                
+                if (sortBy === 'rating') {
+                    sortedProviders.sort((a, b) => b.rating - a.rating);
+                } else if (sortBy === 'distance') {
+                    sortedProviders.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
+                } else if (sortBy === 'price') {
+                    sortedProviders.sort((a, b) => {
+                        const priceA = parseFloat(a.price.replace(/[^\d.]/g, ''));
+                        const priceB = parseFloat(b.price.replace(/[^\d.]/g, ''));
+                        return priceA - priceB;
+                    });
+                }
+
+                // Generate provider cards
+                providerList.innerHTML = sortedProviders.map(provider => `
+                    <div class="provider-card">
+                        <div class="provider-header">
+                            <div class="provider-avatar">${provider.name.split(' ').map(n => n[0]).join('')}</div>
+                            <div class="provider-info">
+                                <h3>${provider.name}</h3>
+                                <div class="provider-rating">
+                                    ${generateStarRating(provider.rating)}
+                                    <span>(${provider.reviews} reviews)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="provider-details">
+                            <p><i class="fas fa-phone"></i> ${provider.phone}</p>
+                            <p><i class="fas fa-rupee-sign"></i> ${provider.price}</p>
+                            <p><i class="fas fa-map-marker-alt"></i> ${provider.distance} away</p>
+                            ${provider.experience ? `<p><i class="fas fa-briefcase"></i> ${provider.experience} experience</p>` : ''}
+                            ${provider.subjects ? `<p><i class="fas fa-book"></i> Subjects: ${provider.subjects}</p>` : ''}
+                        </div>
+                        <div class="provider-actions">
+                            <button class="action-btn call-btn" onclick="callProvider('${provider.phone}')">
+                                <i class="fas fa-phone"></i> Call
+                            </button>
+                            <button class="action-btn whatsapp-btn" onclick="whatsappProvider('${provider.phone}')">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Function to generate star rating
+            function generateStarRating(rating) {
+                let stars = '';
+                const fullStars = Math.floor(rating);
+                const hasHalfStar = rating % 1 >= 0.5;
+                
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= fullStars) {
+                        stars += '<i class="fas fa-star"></i>';
+                    } else if (i === fullStars + 1 && hasHalfStar) {
+                        stars += '<i class="fas fa-star-half-alt"></i>';
+                    } else {
+                        stars += '<i class="far fa-star"></i>';
+                    }
+                }
+                
+                return stars;
+            }
+
+            // Function to filter providers by search term
+            function filterProviders(searchTerm) {
+                const providerCards = document.querySelectorAll('.provider-card');
+                let hasResults = false;
+                
+                providerCards.forEach(card => {
+                    const providerName = card.querySelector('h3').textContent.toLowerCase();
+                    if (providerName.includes(searchTerm)) {
+                        card.style.display = 'block';
+                        hasResults = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                if (!hasResults) {
+                    providerList.innerHTML = `<p class="no-results">No providers match your search for "${searchTerm}".</p>`;
+                }
+            }
+
+            // Global functions for button actions
+            window.callProvider = function(phone) {
+                alert(`Calling ${phone}`);
+                // In a real app, this would initiate a phone call
+            };
+
+            window.whatsappProvider = function(phone) {
+                alert(`Opening WhatsApp chat with ${phone}`);
+                // In a real app, this would open WhatsApp with the number
+            };
+        });
+    </script>
+</body>
+</html>
