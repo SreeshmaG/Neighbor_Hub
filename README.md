@@ -5,14 +5,11 @@
   <img src="https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white">
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black">
   <img src="https://img.shields.io/badge/Font_Awesome-339AF0?logo=fontawesome&logoColor=white">
-  <img src="https://img.shields.io/badge/License-MIT-yellow">
+  
 </div>
 
 <br>
 
-<div align="center">
-  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcW9xZ3RzZ3J5Z2Z4eXJ0dW5xY3B4eG5qY2V6eGJ6dGJ5bW1mZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Jq7n8qjQrHlQbUYj3X/giphy.gif" width="600" alt="Neighbor Hub Demo">
-</div>
 
 ## 🌟 Overview
 
